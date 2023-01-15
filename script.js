@@ -147,6 +147,7 @@ function getPasswordOptions(x, lCase, uCase, numeric, special) {
     // special = confirm("Do you want use: Special characters ($@%&*, etc)?");
     // console.log(special);
 
+    //TU SIE ZAPETLA W NIESKACZONOSC!!!!!!!
     lCase = confirm("Do you want use: Lowercase?");
     console.log(lCase);
     if (!lCase) {
