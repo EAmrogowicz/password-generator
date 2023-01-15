@@ -113,8 +113,8 @@ function getPasswordOptions(x, lCase, uCase, numeric, special) {
   };
 
   const passwordMinReq = (req) => {
-    if (req) {
-      req = prompt(
+    if (req == false) {
+      req = confirm(
         "ERROR! At least one group needs to be selected. TRY AGAIN!"
       );
       return false;
@@ -149,15 +149,11 @@ function getPasswordOptions(x, lCase, uCase, numeric, special) {
 
     lCase = confirm("Do you want use: Lowercase?");
     console.log(lCase);
-
-    if (lCase == false) {
-      console.log("Error!");
-      break;
+    if (!lCase) {
+      if (passwordMinReq(lCase)) {
+        break;
+      }
     }
-
-    // if (passwordMinReq(lCase)) {
-    //   break;
-    // }
   }
 }
 getPasswordOptions(
