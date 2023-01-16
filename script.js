@@ -88,6 +88,8 @@ let upperCasedCharacters = [
   "Z",
 ];
 
+//
+
 let passwordLength;
 let passwordLengthInt;
 let passwordLowercase;
@@ -123,6 +125,31 @@ function getPasswordOptions(x) {
   }
 }
 
+// function passwordMinReq() {
+//   const minReq = (req) => {
+//     if (req == false) {
+//       req = confirm(
+//         "ERROR! At least one group needs to be selected. TRY AGAIN!"
+//       );
+//       return false;
+//     } else {
+//       console.log(req);
+//       return true;
+//     }
+//   };
+
+//   while (true) {
+//     //TU SIE ZAPETLA W NIESKACZONOSC!!!!!!!
+//     lCase = confirm("Do you want use: Lowercase?");
+//     console.log(lCase);
+//     if (!lCase) {
+//       if (passwordMinReq(lCase)) {
+//         break;
+//       }
+//     }
+//   }
+// }
+
 getPasswordOptions(passwordLength);
 // Prompt for other password criteria
 passwordLowercase = confirm("Do you want use: Lowercase?");
@@ -133,6 +160,8 @@ passwordNumeric = confirm("Do you want use: Numeric?");
 console.log(passwordNumeric);
 passwordSpecial = confirm("Do you want use: Special characters ($@%&*, etc)?");
 console.log(passwordSpecial);
+
+//
 
 // Function for getting a random element from an array
 function getRandom(arr) {
@@ -165,15 +194,14 @@ function generatePassword(x, arr) {
   return generatedPassword;
 }
 
-generatePassword(passwordLengthInt, arrOptionsFlat);
-console.log(generatedPassword);
+// generatePassword(passwordLengthInt, arrOptionsFlat);
 
 // Get references to the #generate element
 let generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
-  let password = generatePassword();
+  let password = generatePassword(passwordLengthInt, arrOptionsFlat);
   let passwordText = document.querySelector("#password");
 
   passwordText.value = password;
