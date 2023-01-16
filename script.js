@@ -102,6 +102,7 @@ function getPasswordLength() {
       return true;
     }
   };
+
   // Loop to check if input is a number and it's length
   while (true) {
     const userInput = prompt(
@@ -116,10 +117,10 @@ function getPasswordLength() {
   }
 }
 
-// Function validate for each input to ensure at least one character type is selected
-function getpasswordMinReq() {
+// Function validate for each character type input to ensure at least one is selected
+function getpasswordUserOptions() {
   while (true) {
-    // Prompt for other password criteria
+    // Prompt for character type password criteria
     const lCase = confirm("Do you want use: Lowercase?");
     console.log(lCase);
     const uCase = confirm("Do you want use: Uppercase?");
@@ -130,6 +131,8 @@ function getpasswordMinReq() {
       "Do you want use: Special characters ($@%&*, etc)?"
     );
     console.log(special);
+
+    // Check if one character is at least selected
     if (lCase || uCase || numeric || special) {
       return {
         passwordLCase: lCase,
@@ -148,11 +151,11 @@ function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-//Function to check which user options were selected to push values to array
-const userOptions = (option, value, arr, characters) => {
+// Function to check which user options were selected to push values to array
+const userOptions = (option, characters, arr, minChar) => {
   if (option == true) {
-    characters.push(getRandom(value));
-    arr.push(value);
+    minChar.push(getRandom(characters));
+    arr.push(characters);
   }
 };
 
@@ -160,47 +163,49 @@ let generatedPassword = "";
 // Function to generate password with user input
 function generatePassword() {
   const passwordLength = getPasswordLength();
-  const passwordUserOptions = getpasswordMinReq();
+  const passwordUserOptions = getpasswordUserOptions();
 
-  //Creates random array which includes all selected/true user options
+  // Creates random array which includes all selected/true user options
   const arrOptions = [];
-  const guarantedChar = [];
+  // Creates random array which includes guaranted charcter from each selected/true user options
+  const guaranteedChar = [];
 
   userOptions(
     passwordUserOptions.passwordLCase,
     lowerCasedCharacters,
     arrOptions,
-    guarantedChar
+    guaranteedChar
   );
   userOptions(
     passwordUserOptions.passwordUCase,
     upperCasedCharacters,
     arrOptions,
-    guarantedChar
+    guaranteedChar
   );
   userOptions(
     passwordUserOptions.passwordNumeric,
     numericCharacters,
     arrOptions,
-    guarantedChar
+    guaranteedChar
   );
   userOptions(
     passwordUserOptions.passwordSpecial,
     specialCharacters,
     arrOptions,
-    guarantedChar
+    guaranteedChar
   );
 
   // Method creates a new array with all sub-array elements concatenated into it
   const arrOptionsFlat = arrOptions.flat();
-  const guarantedCharString = guarantedChar.toString().replace(/,/g, "");
+  // Change array to string and remove comma
+  const guaranteedCharString = guaranteedChar.toString().replace(/,/g, "");
 
-  for (let i = 0; i < passwordLength - guarantedChar.length; i++) {
+  for (let i = 0; i < passwordLength - guaranteedChar.length; i++) {
     generatedPassword = generatedPassword + getRandom(arrOptionsFlat);
   }
   console.log(generatedPassword);
-  console.log(guarantedCharString);
-  generatedPassword = generatedPassword + guarantedCharString;
+  console.log(guaranteedCharString);
+  generatedPassword = generatedPassword + guaranteedCharString;
   console.log(generatedPassword);
 
   // Randomise generated password
@@ -211,7 +216,6 @@ function generatePassword() {
     })
     .join("");
 
-  console.log(shuffledPassword);
   return shuffledPassword;
 }
 
