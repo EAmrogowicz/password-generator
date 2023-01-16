@@ -91,14 +91,14 @@ let upperCasedCharacters = [
 // Function to prompt user for password length
 function getPasswordLength() {
   // Function to check password length limits
-  const passwordLengthCheck = (num) => {
-    if (num < 8 || num > 128) {
-      num = prompt(
-        "Password length needs to be at least 8 characters but no more than 128. Try again:"
+  const passwordLengthCheck = (value) => {
+    if (value < 8 || value > 128) {
+      alert(
+        "Password length needs to be at least 8 characters but no more than 128. Try again"
       );
       return false;
     } else {
-      console.log(num);
+      console.log(value);
       return true;
     }
   };
@@ -141,7 +141,7 @@ function getpasswordUserOptions() {
         passwordSpecial: special,
       };
     } else {
-      confirm("ERROR! At least one group needs to be selected. TRY AGAIN!");
+      alert("ERROR! At least one group needs to be selected. TRY AGAIN!");
     }
   }
 }
