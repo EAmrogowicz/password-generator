@@ -88,17 +88,8 @@ let upperCasedCharacters = [
   "Z",
 ];
 
-//
-
-let passwordLength;
-let passwordLengthInt;
-let passwordLowercase;
-let passwordUppercase;
-let passwordNumeric;
-let passwordSpecial;
-
 // Function to prompt user for password length
-function getPasswordOptions(x) {
+function getPasswordLength() {
   // Function to check password length limits
   const passwordLengthCheck = (num) => {
     if (num < 8 || num > 128) {
@@ -113,55 +104,44 @@ function getPasswordOptions(x) {
   };
   // Loop to check if input is a number and it's length
   while (true) {
-    x = prompt(
+    const userInput = prompt(
       "Type a NUMBER for password length - at least 8 characters but no more than 128:"
     );
-    passwordLengthInt = parseInt(x);
+    const passwordLengthInt = parseInt(userInput);
     if (!isNaN(passwordLengthInt)) {
       if (passwordLengthCheck(passwordLengthInt)) {
-        break;
+        return passwordLengthInt;
       }
     }
   }
 }
 
-// function passwordMinReq() {
-//   const minReq = (req) => {
-//     if (req == false) {
-//       req = confirm(
-//         "ERROR! At least one group needs to be selected. TRY AGAIN!"
-//       );
-//       return false;
-//     } else {
-//       console.log(req);
-//       return true;
-//     }
-//   };
-
-//   while (true) {
-//     //TU SIE ZAPETLA W NIESKACZONOSC!!!!!!!
-//     lCase = confirm("Do you want use: Lowercase?");
-//     console.log(lCase);
-//     if (!lCase) {
-//       if (passwordMinReq(lCase)) {
-//         break;
-//       }
-//     }
-//   }
-// }
-
-getPasswordOptions(passwordLength);
-// Prompt for other password criteria
-passwordLowercase = confirm("Do you want use: Lowercase?");
-console.log(passwordLowercase);
-passwordUppercase = confirm("Do you want use: Uppercase?");
-console.log(passwordUppercase);
-passwordNumeric = confirm("Do you want use: Numeric?");
-console.log(passwordNumeric);
-passwordSpecial = confirm("Do you want use: Special characters ($@%&*, etc)?");
-console.log(passwordSpecial);
-
-//
+// Function validate for each input to ensure at least one character type is selected
+function getpasswordMinReq() {
+  while (true) {
+    // Prompt for other password criteria
+    const lCase = confirm("Do you want use: Lowercase?");
+    console.log(lCase);
+    const uCase = confirm("Do you want use: Uppercase?");
+    console.log(uCase);
+    const numeric = confirm("Do you want use: Numeric?");
+    console.log(numeric);
+    const special = confirm(
+      "Do you want use: Special characters ($@%&*, etc)?"
+    );
+    console.log(special);
+    if (lCase || uCase || numeric || special) {
+      return {
+        passwordLCase: lCase,
+        passwordUCase: uCase,
+        passwordNumeric: numeric,
+        passwordSpecial: special,
+      };
+    } else {
+      confirm("ERROR! At least one group needs to be selected. TRY AGAIN!");
+    }
+  }
+}
 
 // Function for getting a random element from an array
 function getRandom(arr) {
@@ -169,39 +149,78 @@ function getRandom(arr) {
 }
 
 //Function to check which user options were selected to push values to array
-const userOptions = (option, x, arr) => {
+const userOptions = (option, value, arr, characters) => {
   if (option == true) {
-    return arr.push(x);
+    characters.push(getRandom(value));
+    arr.push(value);
   }
 };
 
-//Creates random array which includes all selected/true user options
-const arrOptions = [];
-userOptions(passwordLowercase, lowerCasedCharacters, arrOptions);
-userOptions(passwordUppercase, upperCasedCharacters, arrOptions);
-userOptions(passwordNumeric, numericCharacters, arrOptions);
-userOptions(passwordSpecial, specialCharacters, arrOptions);
-
-// Method creates a new array with all sub-array elements concatenated into it
-const arrOptionsFlat = arrOptions.flat();
-
 let generatedPassword = "";
 // Function to generate password with user input
-function generatePassword(x, arr) {
-  for (let i = 0; i < x; i++) {
-    generatedPassword = generatedPassword + getRandom(arr);
-  }
-  return generatedPassword;
-}
+function generatePassword() {
+  const passwordLength = getPasswordLength();
+  const passwordUserOptions = getpasswordMinReq();
 
-// generatePassword(passwordLengthInt, arrOptionsFlat);
+  //Creates random array which includes all selected/true user options
+  const arrOptions = [];
+  const guarantedChar = [];
+
+  userOptions(
+    passwordUserOptions.passwordLCase,
+    lowerCasedCharacters,
+    arrOptions,
+    guarantedChar
+  );
+  userOptions(
+    passwordUserOptions.passwordUCase,
+    upperCasedCharacters,
+    arrOptions,
+    guarantedChar
+  );
+  userOptions(
+    passwordUserOptions.passwordNumeric,
+    numericCharacters,
+    arrOptions,
+    guarantedChar
+  );
+  userOptions(
+    passwordUserOptions.passwordSpecial,
+    specialCharacters,
+    arrOptions,
+    guarantedChar
+  );
+
+  // Method creates a new array with all sub-array elements concatenated into it
+  const arrOptionsFlat = arrOptions.flat();
+  const guarantedCharString = guarantedChar.toString().replace(/,/g, "");
+
+  for (let i = 0; i < passwordLength - guarantedChar.length; i++) {
+    generatedPassword = generatedPassword + getRandom(arrOptionsFlat);
+  }
+  console.log(generatedPassword);
+  console.log(guarantedCharString);
+  generatedPassword = generatedPassword + guarantedCharString;
+  console.log(generatedPassword);
+
+  // Randomise generated password
+  const shuffledPassword = generatedPassword
+    .split("")
+    .sort(function () {
+      return 0.5 - Math.random();
+    })
+    .join("");
+
+  console.log(shuffledPassword);
+  return shuffledPassword;
+}
 
 // Get references to the #generate element
 let generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
-  let password = generatePassword(passwordLengthInt, arrOptionsFlat);
+  let password = generatePassword();
   let passwordText = document.querySelector("#password");
 
   passwordText.value = password;
