@@ -88,8 +88,6 @@ let upperCasedCharacters = [
   "Z",
 ];
 
-//
-
 let passwordLength;
 let passwordLengthInt;
 let passwordLowercase;
@@ -97,8 +95,8 @@ let passwordUppercase;
 let passwordNumeric;
 let passwordSpecial;
 
-// Function to prompt user for password options
-function getPasswordOptions(x, lCase, uCase, numeric, special) {
+// Function to prompt user for password length
+function getPasswordOptions(x) {
   // Function to check password length limits
   const passwordLengthCheck = (num) => {
     if (num < 8 || num > 128) {
@@ -111,19 +109,6 @@ function getPasswordOptions(x, lCase, uCase, numeric, special) {
       return true;
     }
   };
-
-  const passwordMinReq = (req) => {
-    if (req == false) {
-      req = confirm(
-        "ERROR! At least one group needs to be selected. TRY AGAIN!"
-      );
-      return false;
-    } else {
-      console.log(req);
-      return true;
-    }
-  };
-
   // Loop to check if input is a number and it's length
   while (true) {
     x = prompt(
@@ -136,57 +121,52 @@ function getPasswordOptions(x, lCase, uCase, numeric, special) {
       }
     }
   }
-
-  while (true) {
-    // Prompt for other password criteria
-
-    // uCase = confirm("Do you want use: Uppercase?");
-    // console.log(uCase);
-    // numeric = confirm("Do you want use: Numeric?");
-    // console.log(numeric);
-    // special = confirm("Do you want use: Special characters ($@%&*, etc)?");
-    // console.log(special);
-
-    //TU SIE ZAPETLA W NIESKACZONOSC!!!!!!!
-    lCase = confirm("Do you want use: Lowercase?");
-    console.log(lCase);
-    if (!lCase) {
-      if (passwordMinReq(lCase)) {
-        break;
-      }
-    }
-  }
 }
-getPasswordOptions(
-  passwordLength,
-  passwordLowercase,
-  passwordUppercase,
-  passwordNumeric,
-  passwordSpecial
-);
 
-//
+getPasswordOptions(passwordLength);
+// Prompt for other password criteria
+passwordLowercase = confirm("Do you want use: Lowercase?");
+console.log(passwordLowercase);
+passwordUppercase = confirm("Do you want use: Uppercase?");
+console.log(passwordUppercase);
+passwordNumeric = confirm("Do you want use: Numeric?");
+console.log(passwordNumeric);
+passwordSpecial = confirm("Do you want use: Special characters ($@%&*, etc)?");
+console.log(passwordSpecial);
 
 // Function for getting a random element from an array
 function getRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
-// console.log(getRandom(upperCasedCharacters));
 
+//Function to check which user options were selected to push values to array
+const userOptions = (option, x, arr) => {
+  if (option == true) {
+    return arr.push(x);
+  }
+};
+
+//Creates random array which includes all selected/true user options
+const arrOptions = [];
+userOptions(passwordLowercase, lowerCasedCharacters, arrOptions);
+userOptions(passwordUppercase, upperCasedCharacters, arrOptions);
+userOptions(passwordNumeric, numericCharacters, arrOptions);
+userOptions(passwordSpecial, specialCharacters, arrOptions);
+
+// Method creates a new array with all sub-array elements concatenated into it
+const arrOptionsFlat = arrOptions.flat();
+
+let generatedPassword = "";
 // Function to generate password with user input
-function generatePassword() {
-  let generatedPassword = "hello";
-  const randomArr = new Array();
-
-  // if (passwordLowercase) {
-  //   randomArr.push(lowerCasedCharacters);
-  // }
-
-  for (let i = 0; i < this.passwordLengthInt; i++) {
-    getRandom(randomArr);
+function generatePassword(x, arr) {
+  for (let i = 0; i < x; i++) {
+    generatedPassword = generatedPassword + getRandom(arr);
   }
   return generatedPassword;
 }
+
+generatePassword(passwordLengthInt, arrOptionsFlat);
+console.log(generatedPassword);
 
 // Get references to the #generate element
 let generateBtn = document.querySelector("#generate");
