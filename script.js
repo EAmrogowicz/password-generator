@@ -196,7 +196,7 @@ function generatePassword() {
   // Method to create a new array with all sub-array elements concatenated into it
   const arrOptionsFlat = arrOptions.flat();
   // Change array to string and remove commas
-  const guaranteedCharString = guaranteedChar.join("");
+  // const guaranteedCharString = guaranteedChar.join("");
 
   // Loop to generate password exluding guaranteed characters
   for (let i = 0; i < passwordLength - guaranteedChar.length; i++) {
@@ -204,7 +204,7 @@ function generatePassword() {
   }
 
   // Adds guaranteed characters at the end
-  generatedPassword = generatedPassword + guaranteedCharString;
+  generatedPassword = generatedPassword + guaranteedChar.join("");
 
   // Randomise generated password
   const shuffledPassword = generatedPassword
